@@ -1,98 +1,86 @@
 #include "shell.h"
 
 /**
- * _eputs - Prints a null-terminated string to stderr.
- * @str: The string to be printed.
+ * _eputs - prints an input string
+ * @str: the string to be printed
  *
- * Return: Nothing.
+ * Return: Nothing
  */
 void _eputs(char *str)
 {
+	int i = 0;
+
 	if (!str)
 		return;
-
-	for (int i = 0; str[i] != '\0'; i++)
+	while (str[i] != '\0')
+	{
 		_eputchar(str[i]);
+		i++;
+	}
 }
 
 /**
- * _eputchar - Writes the character 'c' to the standard error (stderr).
- * @c: The character to be printed.
+ * _eputchar - writes the character c to stderr
+ * @c: The character to print
  *
  * Return: On success 1.
- *         On error, -1 is returned, and errno is set appropriately.
+ * On error, -1 is returned, and errno is set appropriately.
  */
 int _eputchar(char c)
 {
 	static int i;
 	static char buf[WRITE_BUF_SIZE];
 
-	switch (c)
+	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
 	{
-	case BUF_FLUSH:
 		write(2, buf, i);
 		i = 0;
-		break;
-	default:
-		if (i >= WRITE_BUF_SIZE)
-		{
-			write(2, buf, i);
-			i = 0;
-		}
-		buf[i++] = c;
 	}
-
+	if (c != BUF_FLUSH)
+		buf[i++] = c;
 	return (1);
 }
 
 /**
- * _putfd - Writes the character 'c' to the given file descriptor 'fd'.
- * @c: The character to be printed.
- * @fd: The file descriptor to write to.
+ * _putfd - writes the character c to given fd
+ * @c: The character to print
+ * @fd: The filedescriptor to write to
  *
  * Return: On success 1.
- *         On error, -1 is returned, and errno is set appropriately.
+ * On error, -1 is returned, and errno is set appropriately.
  */
 int _putfd(char c, int fd)
 {
 	static int i;
 	static char buf[WRITE_BUF_SIZE];
 
-	switch (c)
+	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
 	{
-	case BUF_FLUSH:
 		write(fd, buf, i);
 		i = 0;
-		break;
-	default:
-		if (i >= WRITE_BUF_SIZE)
-		{
-			write(fd, buf, i);
-			i = 0;
-		}
-		buf[i++] = c;
 	}
-
+	if (c != BUF_FLUSH)
+		buf[i++] = c;
 	return (1);
 }
 
 /**
- * _putsfd - Prints a null-terminated string to the given file descriptor 'fd'.
- * @str: The string to be printed.
- * @fd: The file descriptor to write to.
+ * _putsfd - prints an input string
+ * @str: the string to be printed
+ * @fd: the filedescriptor to write to
  *
- * Return: The number of characters written.
+ * Return: the number of chars put
  */
 int _putsfd(char *str, int fd)
 {
-	if (!str)
-		return (0);
-
 	int i = 0;
 
-	for (; *str; str++)
-		i += _putfd(*str, fd);
-
+	if (!str)
+		return (0);
+	while (*str)
+	{
+		i += _putfd(*str++, fd);
+	}
 	return (i);
 }
 

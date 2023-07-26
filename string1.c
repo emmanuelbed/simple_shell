@@ -5,7 +5,7 @@
  * @dest: the destination
  * @src: the source
  *
- * Return: pointer to the destination
+ * Return: pointer to destination
  */
 char *_strcpy(char *dest, char *src)
 {
@@ -13,8 +13,6 @@ char *_strcpy(char *dest, char *src)
 
 	if (dest == src || src == 0)
 		return (dest);
-
-	/* While loop to copy characters from source to destination */
 	while (src[i])
 	{
 		dest[i] = src[i];
@@ -37,19 +35,13 @@ char *_strdup(const char *str)
 
 	if (str == NULL)
 		return (NULL);
-
-	/* While loop to calculate the length of the string */
 	while (*str++)
 		length++;
-
 	ret = malloc(sizeof(char) * (length + 1));
 	if (!ret)
 		return (NULL);
-
-	/* For loop to duplicate the string */
-	for (int i = 0; i <= length; i++)
-		ret[i] = str[i];
-
+	for (length++; length--;)
+		ret[length] = *--str;
 	return (ret);
 }
 
@@ -65,8 +57,6 @@ void _puts(char *str)
 
 	if (!str)
 		return;
-
-	/* While loop to print the characters of the string */
 	while (str[i] != '\0')
 	{
 		_putchar(str[i]);
@@ -91,10 +81,8 @@ int _putchar(char c)
 		write(1, buf, i);
 		i = 0;
 	}
-
 	if (c != BUF_FLUSH)
 		buf[i++] = c;
-
 	return (1);
 }
 
